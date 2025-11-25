@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import React from "react";
+import Image from 'next/image';
 import {
   SignOutButton,
   SignedIn,
@@ -9,8 +10,7 @@ import {
   useUser,
 } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
-
-
+import logo from "../../../public/logo.png"
 export default function Navbar() {
   const {  user } = useUser();
   const pathname = usePathname();
@@ -21,7 +21,7 @@ export default function Navbar() {
       ? `${baseLinkClasses} underline` //active state
       : `${baseLinkClasses} text-gray-700 hover:bg-gray-200 lg:text-base-content`; //inactive state
   };
-  
+
   const links = (
     <>
       <li>
@@ -37,6 +37,11 @@ export default function Navbar() {
       <li>
         <Link href="/about" className={getLinkClasses("/about")}>
           About
+        </Link>
+      </li>
+      <li>
+        <Link href="/my-kit" className={getLinkClasses("/my-kit")}>
+          My Kit
         </Link>
       </li>
       <li>
@@ -70,11 +75,18 @@ export default function Navbar() {
           </div>
           <ul
             tabIndex="-1"
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
+            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-10 mt-3 w-52 p-2 shadow"
           >
             {links}
           </ul>
         </div>
+<Image
+  src={logo}
+  alt="" 
+  width={48} 
+  height={48}
+  className="ml-3 w-12 h-12 rounded-full" 
+/>
        <Link href="/" className="btn btn-ghost text-xl font-serif text-secondary">
           TerraLoom
         </Link>
@@ -84,12 +96,14 @@ export default function Navbar() {
       </div>
       <div className="navbar-end">
         <SignedOut>
- <Link href="/login" className="btn btn-primary w-18 lg:w-22 bg-gradient-to-r from-[#632EE3] to-[#9F62F2] ">
+        <div className="">
+           <Link href="/login" className="btn btn-primary w-14 lg:w-22 bg-gradient-to-r from-[#632EE3] to-[#9F62F2] ">
               Login
             </Link>
-         <Link href="/register" className="btn btn-primary w-18 lg:w-22 bg-gradient-to-r from-[#632EE3] to-[#9F62F2] ml-5">
-              Register
+         <Link href="/register" className="btn btn-primary  mr-3 w-14 lg:w-22 bg-gradient-to-r from-[#632EE3] to-[#9F62F2] ml-2 lg:ml-5">
+              Sign Up
             </Link>
+        </div>
         </SignedOut>
         <SignedIn>
           <div className="dropdown dropdown-end">
@@ -105,7 +119,7 @@ export default function Navbar() {
             </div>
           <ul
               tabIndex={0}
-              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[10] mt-3 w-52 p-2 shadow"
             >
             <li>
                 <div className="font-bold text-lg text-black ">
