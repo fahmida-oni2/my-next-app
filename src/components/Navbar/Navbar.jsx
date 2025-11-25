@@ -2,36 +2,45 @@
 import Link from "next/link";
 import React from "react";
 import {
-  SignInButton,
   SignOutButton,
-  SignUpButton,
   SignedIn,
   SignedOut,
   UserButton,
   useUser,
 } from "@clerk/nextjs";
-import "./Navbar.css";
+import { usePathname } from "next/navigation";
+
+
 export default function Navbar() {
   const {  user } = useUser();
+  const pathname = usePathname();
+  const baseLinkClasses = "m-2 p-2 rounded-lg transition-colors duration-200";
+  const getLinkClasses = (href) => {
+    const isActive = pathname === href;
+    return isActive
+      ? `${baseLinkClasses} underline` //active state
+      : `${baseLinkClasses} text-gray-700 hover:bg-gray-200 lg:text-base-content`; //inactive state
+  };
+  
   const links = (
     <>
       <li>
-        <Link href="/" className="m-2">
+        <Link href="/" className={getLinkClasses("/")}>
           Home
         </Link>
       </li>
       <li>
-        <Link href="/allKits" className="m-2">
+        <Link href="/allKits" className={getLinkClasses("/allKits")}>
           All Kits
         </Link>
       </li>
       <li>
-        <Link href="/about" className="m-2">
+        <Link href="/about" className={getLinkClasses("/about")}>
           About
         </Link>
       </li>
       <li>
-        <Link href="/quiz" className="m-2">
+        <Link href="/quiz" className={getLinkClasses("/quiz")}>
           Quiz
         </Link>
       </li>
@@ -75,16 +84,12 @@ export default function Navbar() {
       </div>
       <div className="navbar-end">
         <SignedOut>
-          <SignInButton mode="modal">
-            <button className="btn btn-primary w-18 lg:w-22 bg-gradient-to-r from-[#632EE3] to-[#9F62F2] ">
+ <Link href="/login" className="btn btn-primary w-18 lg:w-22 bg-gradient-to-r from-[#632EE3] to-[#9F62F2] ">
               Login
-            </button>
-          </SignInButton>
-          <SignUpButton mode="modal">
-            <button className="btn btn-primary w-18 lg:w-22 bg-gradient-to-r from-[#632EE3] to-[#9F62F2] ml-5">
+            </Link>
+         <Link href="/register" className="btn btn-primary w-18 lg:w-22 bg-gradient-to-r from-[#632EE3] to-[#9F62F2] ml-5">
               Register
-            </button>
-          </SignUpButton>
+            </Link>
         </SignedOut>
         <SignedIn>
           <div className="dropdown dropdown-end">
@@ -112,12 +117,12 @@ export default function Navbar() {
                 <div className="divider my-0"></div>
               </li>
               <li>
-                <Link href="/protected/add-kit" >
+                <Link href="/add-kit" >
                  Add Kit
                 </Link>
               </li>
               <li>
-                <Link href="/protected/manage-kits" className='mb-3' >
+                <Link href="/manage-kit" className='mb-3' >
                    Manage Kits
                 </Link>
               </li>
