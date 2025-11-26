@@ -12,8 +12,8 @@ const defaultReviewValues = {
   rating: 0,
 };
 
-export default function ReviewForm({ propertyData }) {
-    const {image_url,title,description,price,category,_id } = propertyData;
+export default function ReviewForm({ kitData }) {
+    const {image_url,title,description,price,category,_id } = kitData;
     const router = useRouter(); 
 
     const {

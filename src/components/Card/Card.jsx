@@ -4,6 +4,7 @@ import React from 'react'
 
 export default function Card({kit}) {
         const {image_url,title,description,price,category,_id,stock_status}= kit || {}
+        const newPrice = kit.price;
         const stockClass = stock_status === 'In Stock' 
     ? 'text-green-600 border-green-200' 
     : stock_status === 'Low Stock' 
@@ -31,7 +32,7 @@ export default function Card({kit}) {
       {stock_status}
     </button>
     <button  className='flex h-10 w-30 btn btn-outline gap-2 border-gray-200 text-orange-500 bg-base-300'>
-        {price} TK
+        {newPrice.toFixed(2)} TK
     </button>
    </div>
    <Link href= {`/all-kits/${_id}`}   className='flex h-10 w-full btn btn-outline gap-2 border-gray-200 text-white bg-gradient-to-r from-[#632EE3] to-[#9F62F2]'>

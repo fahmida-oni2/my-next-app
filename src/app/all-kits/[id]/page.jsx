@@ -44,7 +44,7 @@ export default async function Page(props) {
                 
                 <div className="mr-10">
                     <Image
-                        className="lg:w-150 lg:h-100 md:w-[200px] w-[250px] mx-auto lg:object-cover shadow-xl border-gray-500"
+                        className="lg:w-350 lg:h-100 md:w-[200px] w-[250px] mx-auto lg:object-cover shadow-xl border-gray-500"
                         src={image_url} 
                         alt={title}
                         width={400} 
@@ -82,7 +82,7 @@ export default async function Page(props) {
             </div>
 
             <ReviewForm 
-                propertyData={{ 
+                kitData={{ 
                     _id, 
                     title, 
                     price, 
