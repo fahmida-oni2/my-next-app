@@ -86,35 +86,35 @@ if (kits.length === 0) {
     }
     
     return (
-        <div className="overflow-x-auto shadow-lg rounded-lg border border-gray-100 flex flex-col mb-10">
+        <div className="overflow-x-auto shadow-lg rounded-lg border border-gray-100 flex flex-col mb-20">
            <h1 className="text-center font-bold text-3xl mt-5 mb-5">Posted Kits</h1>
             <table className="min-w-full divide-y divide-gray-200">
                 {/* Table Header */}
-                <thead className="bg-gray-50">
+                <thead className="bg-gray-50 ">
                     <tr>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
+                        <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase ">
                             Title
                         </th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
+                        <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase ">
                             Category
                         </th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
+                        <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase ">
                             Price
                         </th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
+                        <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase ">
                             Stock
                         </th>
-                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase ">
+                        <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase ">
                             Created
                         </th>
-                        <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase ">
+                        <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase ">
                             Actions
                         </th>
                     </tr>
                 </thead>
                 
                 {/* Table Body */}
-                <tbody className="bg-white divide-y divide-gray-200 ">
+                <tbody className="bg-white divide-y divide-gray-200 text-center ">
                     {kits.map(kit => (
                         <Table 
                             key={kit._id} 

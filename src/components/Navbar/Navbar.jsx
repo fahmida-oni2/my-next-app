@@ -40,8 +40,8 @@ export default function Navbar() {
         </Link>
       </li>
       <li>
-        <Link href="/my-kit" className={getLinkClasses("/my-kit")}>
-          My Kit
+        <Link href="/my-list" className={getLinkClasses("/my-list")}>
+          My Purchase
         </Link>
       </li>
       <li>

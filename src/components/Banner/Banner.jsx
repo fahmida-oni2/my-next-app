@@ -1,14 +1,15 @@
-'use client';
-import React from 'react'
-import { Swiper, SwiperSlide } from 'swiper/react';
+"use client";
+import React from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import "animate.css";
+import Link from "next/link";
 export default function Banner() {
   return (
-   <div className="m-5 mt-1">
+    <div className="m-5 mt-1">
       <Swiper
         spaceBetween={30}
         centeredSlides={true}
@@ -27,19 +28,24 @@ export default function Banner() {
           <div
             className="hero min-h-screen"
             style={{
-              backgroundImage:
-                "url(https://i.ibb.co.com/LG30919/pexels-energepic-com-27411-313691.jpg)",
+              backgroundImage: "url(https://i.ibb.co.com/1YZvFkpK/image.png)",
             }}
           >
             <div className="hero-overlay"></div>
             <div className=" hero-content text-neutral-content flex flex-col lg:flex-row justify-center items-center p-4 ">
               <div className="max-w-md  ">
                 <h1 className="mb-5 text-5xl font-bold animate__animated animate__backInUp">
-                 TerraLoom 
+                  Handcraft Your World: Sustainable DIY Kits by TerraLoom
                 </h1>
                 <p className=" text-2xl lg:text-3xl font-bold animate__animated animate__swing">
-                    Handcraft & Sustainable DIY Kits
+                 Unlock your creative potential with eco-conscious projects that are rewarding to make and gentle on the Earth
                 </p>
+                            <Link
+          href="/all-kits"
+          className="btn rounded-xl text-white bg-gradient-to-r from-[#632EE3] to-[#9F62F2] w-50 mt-10"
+        >
+          Explore
+        </Link>
               </div>
             </div>
           </div>
@@ -48,8 +54,7 @@ export default function Banner() {
           <div
             className="hero min-h-screen"
             style={{
-              backgroundImage:
-                "url(https://i.ibb.co.com/QF9JVZ7T/pexels-jessica-bryant-592135-1370704.jpg)",
+              backgroundImage: "url(https://i.ibb.co.com/Kp8L29tX/image.png)",
             }}
           >
             <div className="hero-overlay"></div>
@@ -59,15 +64,18 @@ export default function Banner() {
                   Discover, purchase, and share curated DIY kits
                 </h2>
                 <p className="text-2xl lg:text-3xl">
-               We combine premium craft boxes with a creative community hub, perfectly aligned with our ‘Kits’ feature.
+                  We combine premium craft boxes with a creative community hub,
+                  perfectly aligned with our ‘Kits’ feature.
                 </p>
-                     <button className=" btn btn-primary w-30 bg-gradient-to-r from-[#632EE3] to-[#9F62F2] ">
-                     Sign Out
-                    </button>
+                <Link
+                  href="/all-kits"
+                  className="btn rounded-xl text-white bg-gradient-to-r from-[#632EE3] to-[#9F62F2] w-50"
+                >
+                  Browse
+                </Link>
               </div>
             </div>
           </div>
-        
         </SwiperSlide>
 
         <SwiperSlide>
@@ -75,26 +83,26 @@ export default function Banner() {
             className="hero min-h-screen "
             style={{
               backgroundImage:
-                "url(https://i.ibb.co.com/99pRvbfJ/pexels-falling4utah-2724748.jpg)",
+                "url(https://i.ibb.co.com/m5jLR4x2/image.png)",
             }}
           >
             <div className="hero-overlay"></div>
             <div className="hero-content text-neutral-content flex flex-col lg:flex-row justify-center items-center p-4">
               <div className="space-y-6 text-center lg:text-left lg:mr-10">
                 <h2 className="text-5xl lg:text-6xl font-bold">
-                  Search. Compare. Secure Your Next Space
+                  Post and Purchase your DIY kits
                 </h2>
-                <p className="text-2xl lg:text-3xl">
-                 Discover a seamless way to explore verified listings tailored to your needs. <br />
-                  Make confident property decisions with a platform built for clarity, speed, and trust.
-                </p>
+                 <Link
+                  href="/login"
+                  className="btn rounded-xl text-white bg-gradient-to-r from-[#632EE3] to-[#9F62F2] w-50"
+                >
+                  Purchase
+                </Link>
               </div>
             </div>
           </div>
         </SwiperSlide>
-          
       </Swiper>
-    
     </div>
-  )
+  );
 }

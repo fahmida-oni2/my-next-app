@@ -130,7 +130,7 @@ export default function page() {
             <div className="flex justify-end items-end p-2">
               <button
                 onClick={() => handleDeleteReview(index)}
-                className="btn bg-[#00D390] text-white hover:bg-[#00b97a]"
+                className="btn bg-orange-500 rounded-2xl text-white hover:bg-[#00b97a]"
               >
                 Delete 
               </button>

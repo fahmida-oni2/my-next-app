@@ -16,12 +16,9 @@ const useProductData = (kitId) => {
 
     const fetchProduct = async () => {
       try {
-        // Fetch the kit data using the ID
         const res = await fetch(`http://localhost:5000/all-kits/${kitId}`);
         if (!res.ok) throw new Error("Failed to fetch kit data");
         const data = await res.json();
-
-        // Assuming the API returns the object directly or inside a 'result' key
         setKitData(data.result || data || {});
       } catch (error) {
         console.error("Fetch Error:", error);
@@ -40,22 +37,14 @@ const useProductData = (kitId) => {
 export default function page() {
   const router = useRouter();
   const params = useParams();
-  // 1. FIX: Get the ID from the URL parameters
   const kitId = params.id;
 
-  // Get user data
   const { isLoaded: userLoaded, user } = useUser();
 
-  // 2. FIX: Fetch the existing data using the custom hook
   const { kitData: data, isLoading: dataLoading } = useProductData(kitId);
-
-  // Handle the PUT request logic
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // 3. FIX: Define missing variables
-    const newPriority = 1; // You must calculate/define this value
-    const currentKitId = data?._id || kitId; // Ensure we have the ID
+    const currentKitId = data?._id || kitId; 
 
     if (!currentKitId) {
       toast.error("Kit ID is missing for update.");
