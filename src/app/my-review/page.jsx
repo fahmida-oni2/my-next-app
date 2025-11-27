@@ -31,7 +31,7 @@ export default function page() {
 
         setAllReviews(storedReviews.reverse());
       } catch (error) {
-        console.error("Error loading reviews from localStorage:", error);
+        // console.error("Error loading reviews from localStorage:", error);
         setAllReviews([]);
       } finally {
         setIsLoading(false);
@@ -57,7 +57,7 @@ export default function page() {
 
       toast.success("Review successfully deleted!");
     } catch (error) {
-      console.error("Error saving updated reviews to localStorage:", error);
+      // console.error("Error saving updated reviews to localStorage:", error);
       toast.error("Failed to delete review.");
     }
   };

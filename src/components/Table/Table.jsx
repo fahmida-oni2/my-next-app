@@ -1,9 +1,10 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Table({ kit ,onDelete}) {
-  const { title, category, stock_status, price, created_date, _id } = kit || {};
+  const { title, category, stock_status, price, created_date, _id,image_url } = kit || {};
   const stockClass =
     stock_status === "In Stock"
       ? "bg-green-100 text-green-800"
@@ -20,6 +21,17 @@ export default function Table({ kit ,onDelete}) {
  
   return (
     <tr className="border-b hover:bg-gray-50 transition duration-150 ">
+      <td>
+        <Image
+                  src={image_url} 
+                  alt="image"
+                  width={100}
+                  height={60}
+                  style={{ objectFit: 'cover' }} 
+                  className='p-2 items-center' 
+                />
+          
+      </td>
       <td className="px-6 py-4  text-black font-bold whitespace-nowrap">
         <Link href={`/all-kits/${_id}`}>{title}</Link>
       </td>

@@ -28,7 +28,7 @@ export default function page() {
     e.preventDefault();
     let totalKits = 0;
     try {
-      const countResponse = await fetch("http://localhost:5000/all-kits");
+      const countResponse = await fetch("https://terraloom-kit-api-server.vercel.app/all-kits");
       const existingKits = await countResponse.json();
 
       if (Array.isArray(existingKits)) {
@@ -53,7 +53,7 @@ export default function page() {
       price: parseFloat(e.target.price.value),
       priority: newPriority,
     };
-    fetch("http://localhost:5000/all-kits", {
+    fetch("https://terraloom-kit-api-server.vercel.app/all-kits", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -71,7 +71,7 @@ export default function page() {
           toast.error(
             "Failed to add kit. Server responded, but insertion failed."
           );
-          console.error("Server response data:", data);
+          // console.error("Server response data:", data);
         }
       })
       .catch((err) => {

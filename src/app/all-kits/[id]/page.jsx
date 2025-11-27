@@ -4,11 +4,11 @@ import Link from "next/link";
 import ReviewForm from "@/components/ReviewForm/ReviewForm";
 import AddToCartButton from "@/components/AddToCartButton/AddToCartButton";
 async function getPost(kitId) {
-  const url = `http://localhost:5000/all-kits/${kitId}`;
+  const url = `https://terraloom-kit-api-server.vercel.app/all-kits/${kitId}`;
   const res = await fetch(url);
 
   if (!res.ok) {
-    console.error(`Fetch failed with status: ${res.status}`);
+    // console.error(`Fetch failed with status: ${res.status}`);
     throw new Error("Failed to fetch data");
   }
 

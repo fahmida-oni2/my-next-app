@@ -16,12 +16,12 @@ const useProductData = (kitId) => {
 
     const fetchProduct = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/all-kits/${kitId}`);
+        const res = await fetch(`https://terraloom-kit-api-server.vercel.app/all-kits/${kitId}`);
         if (!res.ok) throw new Error("Failed to fetch kit data");
         const data = await res.json();
         setKitData(data.result || data || {});
       } catch (error) {
-        console.error("Fetch Error:", error);
+        // console.error("Fetch Error:", error);
         toast.error("Failed to load initial kit data.");
       } finally {
         setIsLoading(false);
@@ -60,7 +60,7 @@ export default function page() {
       description: e.target.description.value,
       price: parseFloat(e.target.price.value),
     };
-    fetch(`http://localhost:5000/all-kits/${currentKitId}`, {
+    fetch(`https://terraloom-kit-api-server.vercel.app/all-kits/${currentKitId}`, {
       method: "PUT",
       headers: {
         "Content-type": "application/json",
@@ -69,7 +69,7 @@ export default function page() {
     })
       .then((res) => res.json())
       .then((data) => {
-        toast.success("A property has been updated successfully");
+        toast.success("Kit has been updated successfully");
         e.target.reset();
         router.push(`/all-kits/${currentKitId}`);
       })

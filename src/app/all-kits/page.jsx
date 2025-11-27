@@ -1,7 +1,7 @@
 import KitSearching from '@/components/KitSearching/KitSearching';
 import React from 'react'
 export default async function page() {
-  const data = await fetch('http://localhost:5000/all-kits')
+  const data = await fetch('https://terraloom-kit-api-server.vercel.app/all-kits')
   const kits = await data.json()
    return (
          <div className='flex flex-col min-h-screen'>

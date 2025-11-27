@@ -4,7 +4,7 @@ import Loading from "@/components/Loading/Loading";
 import "animate.css";
 import Image from "next/image";
 import { Suspense } from "react";
-const availableKitPromise = fetch('http://localhost:5000/available-kits').then(res => res.json());
+const availableKitPromise = fetch('https://terraloom-kit-api-server.vercel.app/available-kits').then(res => res.json());
 export default function Home() {
   return (
    <div>

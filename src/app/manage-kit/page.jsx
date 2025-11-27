@@ -24,14 +24,14 @@ export default function page() {
     if (isLoaded && userEmail) {
       setLoading(true);
 
-      fetch(`http://localhost:5000/my-kit?email=${userEmail}`)
+      fetch(`https://terraloom-kit-api-server.vercel.app/my-kit?email=${userEmail}`)
         .then((res) => res.json())
         .then((data) => {
           setKits(Array.isArray(data) ? data : []);
           setLoading(false);
         })
         .catch((error) => {
-          console.error("Error fetching kits:", error);
+          // console.error("Error fetching kits:", error);
           setLoading(false);
         });
     } else if (isLoaded && user === null) {
@@ -53,7 +53,7 @@ export default function page() {
     }).then((result) => {
       if (result.isConfirmed) {
         fetch(
-          `http://localhost:5000/all-kits/${kitId}`,
+          `https://terraloom-kit-api-server.vercel.app/all-kits/${kitId}`,
           {
             method: "DELETE",
             headers: {
@@ -92,6 +92,9 @@ if (kits.length === 0) {
                 {/* Table Header */}
                 <thead className="bg-gray-50 ">
                     <tr>
+                      <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase ">
+                            Image
+                        </th>
                         <th scope="col" className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase ">
                             Title
                         </th>
