@@ -11,6 +11,7 @@ import {
 } from "@clerk/nextjs";
 import { usePathname } from "next/navigation";
 import logo from "../../../public/logo.png"
+import ThemeToggle from "../ThemeToggle";
 export default function Navbar() {
   const {  user } = useUser();
   const pathname = usePathname();
@@ -19,7 +20,7 @@ export default function Navbar() {
     const isActive = pathname === href;
     return isActive
       ? `${baseLinkClasses} underline` //active state
-      : `${baseLinkClasses} text-gray-700 hover:bg-gray-200 lg:text-base-content`; //inactive state
+      : `${baseLinkClasses}  hover:bg-gray-200 lg:text-base-content`; //inactive state
   };
 
   const links = (
@@ -87,16 +88,17 @@ export default function Navbar() {
   height={48}
   className="ml-3 w-12 h-12 rounded-full" 
 />
-       <Link href="/" className="btn btn-ghost text-xl font-serif text-secondary">
+       <Link href="/" className="btn w-30 btn-ghost text-xl font-serif text-secondary ">
           TerraLoom
         </Link>
+       
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">{links}</ul>
       </div>
       <div className="navbar-end">
         <SignedOut>
-        <div className="">
+        <div>
            <Link href="/login" className="btn btn-primary w-14 lg:w-22 bg-gradient-to-r from-[#632EE3] to-[#9F62F2] ">
               Login
             </Link>
@@ -106,6 +108,9 @@ export default function Navbar() {
         </div>
         </SignedOut>
         <SignedIn>
+           <div>
+          <ThemeToggle></ThemeToggle>
+        </div>
           <div className="dropdown dropdown-end">
             <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
               <UserButton 
@@ -122,10 +127,10 @@ export default function Navbar() {
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[10] mt-3 w-52 p-2 shadow"
             >
             <li>
-                <div className="font-bold text-lg text-black ">
+                <div className="font-bold text-lg ">
                    {user?.fullName || 'User'}
                 </div>
-                <p className="text-sm text-gray-500 truncate mb-2">
+                <p className="text-sm  truncate mb-2">
                   {user?.emailAddresses[0]?.emailAddress}
                 </p>
                 <div className="divider my-0"></div>

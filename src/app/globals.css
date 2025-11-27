@@ -5,6 +5,13 @@
   --foreground: #171717;
 }
 
+[data-theme='dark'] {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --p: #00bfff; 
+  --s: #666666; 
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -12,12 +19,12 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
+} */
 
 body {
   background: var(--background);

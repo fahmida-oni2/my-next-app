@@ -68,7 +68,7 @@ export default function page() {
   if (allReviews.length === 0) {
     return (
       <div className="text-center p-10">
-        <h2 className="text-2xl font-bold text-gray-700">
+        <h2 className="text-2xl font-bold ">
           No Reviews Saved Locally
         </h2>
         <p>Submit a review on a kit's detail page to see it here!</p>

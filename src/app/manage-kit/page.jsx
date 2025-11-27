@@ -82,7 +82,7 @@ export default function page() {
   }
 
 if (kits.length === 0) {
-        return <p className="text-center mt-8 text-gray-600">No kits found.</p>;
+        return <p className="text-center mt-8 ">No kits found.</p>;
     }
     
     return (
