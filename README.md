@@ -35,7 +35,7 @@ After login you will get users information where profile icon show the add and m
     "swiper": "^12.0.3"
 
 
-## Getting Started
+## Installation 
 
 First, run the development server:
 
@@ -56,8 +56,6 @@ You can start editing the page by modifying `app/page.js`. The page auto-updates
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-**Check out our vercel server link https://terraloom-kit-api-server.vercel.app/ for more details.**
+## Live link:
+**Next.js App: (https://terraloom-kit-app.vercel.app/**
+**server link: https://terraloom-kit-api-server.vercel.app/**
