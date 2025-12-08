@@ -99,7 +99,7 @@ export default function ReviewForm({ kitData }) {
                         {/* Submit Button */}
                         <button
                             type="submit"
-                            className="btn bg-gradient-to-r from-[#632EE3] to-[#9F62F2] text-white w-full py-3 rounded-lg font-semibold text-lg transition shadow-md"
+                            className="btn  bg-secondary text-white w-full py-3 rounded-lg font-semibold text-lg transition shadow-md"
                         >
                             Submit
                         </button>

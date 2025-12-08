@@ -98,7 +98,7 @@ export default function page() {
         </p>
         <Link
           href="/all-kits"
-          className="btn rounded-xl text-white bg-gradient-to-r from-[#632EE3] to-[#9F62F2] w-50"
+          className="btn rounded-xl text-white  bg-secondary w-50"
         >
           Browse Kits
         </Link>

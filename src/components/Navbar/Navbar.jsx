@@ -99,10 +99,10 @@ export default function Navbar() {
       <div className="navbar-end">
         <SignedOut>
         <div>
-           <Link href="/login" className="btn btn-primary w-14 lg:w-22 bg-gradient-to-r from-[#632EE3] to-[#9F62F2] ">
+           <Link href="/login" className="btn btn-primary w-14 lg:w-22 bg-secondary ">
               Login
             </Link>
-         <Link href="/register" className="btn btn-primary  mr-3 w-14 lg:w-22 bg-gradient-to-r from-[#632EE3] to-[#9F62F2] ml-2 lg:ml-5">
+         <Link href="/register" className="btn btn-primary  mr-3 w-14 lg:w-22  bg-secondary ml-2 lg:ml-5">
               Sign Up
             </Link>
         </div>
@@ -147,7 +147,7 @@ export default function Navbar() {
               </li>
               <li>
                 <SignOutButton >
-                    <button className=" btn btn-primary w-full bg-gradient-to-r from-[#632EE3] to-[#9F62F2] ">
+                    <button className=" btn btn-primary w-full  bg-secondary ">
                      Sign Out
                     </button>
                 </SignOutButton>

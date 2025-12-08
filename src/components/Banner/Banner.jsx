@@ -26,7 +26,7 @@ export default function Banner() {
       >
         <SwiperSlide>
           <div
-            className="hero min-h-screen"
+            className="hero h-100"
             style={{
               backgroundImage: "url(https://i.ibb.co.com/1YZvFkpK/image.png)",
             }}
@@ -37,22 +37,20 @@ export default function Banner() {
                 <h1 className="mb-5 text-5xl font-bold animate__animated animate__backInUp">
                   Handcraft Your World: Sustainable DIY Kits by TerraLoom
                 </h1>
-                <p className=" text-2xl lg:text-3xl font-bold animate__animated animate__swing">
-                 Unlock your creative potential with eco-conscious projects that are rewarding to make and gentle on the Earth
-                </p>
-                            <Link
-          href="/all-kits"
-          className="btn rounded-xl text-white bg-gradient-to-r from-[#632EE3] to-[#9F62F2] w-50 mt-10"
-        >
-          Explore
-        </Link>
+
+                <Link
+                  href="/all-kits"
+                  className="btn rounded-xl text-white  bg-secondary w-50 mt-10"
+                >
+                  Get Started
+                </Link>
               </div>
             </div>
           </div>
         </SwiperSlide>
         <SwiperSlide>
           <div
-            className="hero min-h-screen"
+            className="hero h-100"
             style={{
               backgroundImage: "url(https://i.ibb.co.com/Kp8L29tX/image.png)",
             }}
@@ -69,7 +67,7 @@ export default function Banner() {
                 </p>
                 <Link
                   href="/all-kits"
-                  className="btn rounded-xl text-white bg-gradient-to-r from-[#632EE3] to-[#9F62F2] w-50"
+                  className="btn rounded-xl text-white  bg-secondary w-50"
                 >
                   Browse
                 </Link>
@@ -80,10 +78,9 @@ export default function Banner() {
 
         <SwiperSlide>
           <div
-            className="hero min-h-screen "
+            className="hero h-100 "
             style={{
-              backgroundImage:
-                "url(https://i.ibb.co.com/m5jLR4x2/image.png)",
+              backgroundImage: "url(https://i.ibb.co.com/m5jLR4x2/image.png)",
             }}
           >
             <div className="hero-overlay"></div>
@@ -92,9 +89,9 @@ export default function Banner() {
                 <h2 className="text-5xl lg:text-6xl font-bold">
                   Post and Purchase your DIY kits
                 </h2>
-                 <Link
+                <Link
                   href="/login"
-                  className="btn rounded-xl text-white bg-gradient-to-r from-[#632EE3] to-[#9F62F2] w-50"
+                  className="btn rounded-xl text-white  bg-secondary w-50"
                 >
                   Purchase
                 </Link>

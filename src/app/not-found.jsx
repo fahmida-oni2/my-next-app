@@ -14,10 +14,10 @@ export default function NotFound() {
                               style={{ objectFit: 'cover' }} 
                               className='p-2 items-center' 
                             />
-            <h1 className='text-center font-extrabold text-4xl text-[#001931]'>Oops, page not found!</h1>
-            <p className='text-center  text-[#001931]'>The page you are looking for is not available.</p>
+            <h1 className='text-center font-extrabold text-4xl '>Oops, page not found!</h1>
+            <p className='text-center  '>The page you are looking for is not available.</p>
             <div className='flex items-center justify-center'>
-             <Link href='/' className='btn rounded-xl text-white bg-gradient-to-r from-[#632EE3] to-[#9F62F2]'>Go Back!</Link>
+             <Link href='/' className='btn rounded-xl text-white  bg-secondary'>Go Back!</Link>
             </div>
         </div>
    

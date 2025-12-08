@@ -135,7 +135,7 @@ export default function Home() {
                       className="input"
                       placeholder="Message"
                     />
-                    <button className="btn bg-orange-500 w-80 hover:bg-indigo-300 mt-4">
+                    <button className="btn  bg-secondary w-80 hover:bg-indigo-300 mt-4">
                       Submit
                     </button>
                   </fieldset>
