@@ -1,6 +1,6 @@
-**This is a [Next.js](https://nextjs.org ) an e-commerce platform dedicated to Sustainable DIY Kits project named TerraLoom bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).**
+**This is a [Next.js](https://nextjs.org ) project of an e-commerce platform dedicated to Sustainable DIY Kits named TerraLoom bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).**
 
-The core mission is to empower creativity with eco-conscious projects that are both rewarding to make and gentle on the Earth.The platform (TerraLoom-Kit-App) serves as a creative community hub where users can: <br>
+The core mission is to empower creativity with eco-conscious projects that are both rewarding to make and gentle on the Earth.The platform  serves as a creative community hub where users can: <br>
 
 1.Discover, purchase, and share curated DIY kits.<br>
 2.The kits emphasize sustainability, using materials like FSC-certified wood, recycled plastics, and biodegradable components, along with zero-waste packaging and climate-positive.
@@ -16,27 +16,28 @@ The core mission is to empower creativity with eco-conscious projects that are b
 7.Kit Details—Dynamic routes for viewing detailed information about a specific kit.<br>
 After login you will get users information where profile icon show the add and manage kit route.<br>
 
-**##Used Technology:**
-1.Next.js
-2.Tailwind CSS
-3.Clerk
-4.Daisy UI
+**Used Technology:**
+1.Next.js <br>
+2.Tailwind CSS <br>
+3.Clerk <br>
+4.Daisy UI <br>
 
-**"dependencies":** { <br>
-    "@clerk/nextjs": "^6.35.4",
-    "animate.css": "^4.1.1",
-    "next": "16.0.3",
-    "react": "19.2.0",
-    "react-dom": "19.2.0",
-    "react-hook-form": "^7.66.1",
-    "react-hot-toast": "^2.6.0",
-    "react-icons": "^5.5.0",
-    "sweetalert2": "^11.26.3",
+**Dependencies:** { <br>
+    "@clerk/nextjs": "^6.35.4", <br>
+    "animate.css": "^4.1.1", <br>
+    "next": "16.0.3", <br>
+    "react": "19.2.0", <br>
+    "react-dom": "19.2.0", <br>
+    "react-hook-form": "^7.66.1", <br>
+    "react-hot-toast": "^2.6.0", <br>
+    "react-icons": "^5.5.0", <br>
+    "sweetalert2": "^11.26.3", <br>
     "swiper": "^12.0.3"
 
 
 ## Installation 
-
+1.Copy the code link and in a cmd and type git clone and paste the URL <br>
+2. open the folder and follow the instructions :<br>
 First, run the development server:
 
 ```bash
