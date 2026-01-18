@@ -4,25 +4,22 @@ import Link from "next/link";
 import Image from "next/image";
 import Loading from "@/components/Loading/Loading";
 import toast, { Toaster } from "react-hot-toast";
-import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 export default function page() {
   const [allReviews, setAllReviews] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { isLoaded, isSignedIn } = useUser();
+  const { data: session, status } = useSession();
   const router = useRouter();
+ 
   useEffect(() => {
-    if (!isLoaded) {
-      return;
-    }
-
-    if (!isSignedIn) {
-      
+  
+    if (status === "unauthenticated") {
       router.push("/login");
       return;
     }
-    // Function to load reviews from localStorage
+
     const loadReviews = () => {
       try {
         const storedReviews = JSON.parse(
@@ -31,14 +28,13 @@ export default function page() {
 
         setAllReviews(storedReviews.reverse());
       } catch (error) {
-        // console.error("Error loading reviews from localStorage:", error);
         setAllReviews([]);
       } finally {
         setIsLoading(false);
       }
     };
     loadReviews();
-  }, [isLoaded, isSignedIn, router]);
+  }, [status, router]);
 
  
   const handleDeleteReview = (indexToDelete) => {
@@ -57,14 +53,14 @@ export default function page() {
 
       toast.success("Review successfully deleted!");
     } catch (error) {
-      // console.error("Error saving updated reviews to localStorage:", error);
       toast.error("Failed to delete review.");
     }
   };
 
-  if (!isLoaded || isLoading) {
+ if (status === "loading" || isLoading) {
     return <Loading />;
   }
+  
   if (allReviews.length === 0) {
     return (
       <div className="text-center p-10">

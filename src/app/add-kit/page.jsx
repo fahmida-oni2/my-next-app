@@ -1,50 +1,50 @@
 "use client";
 import Loading from "@/components/Loading/Loading";
-import { useUser } from "@clerk/nextjs";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
-
-export default function page() {
-  const { isLoaded, user } = useUser();
+export default function AddKitPage() {
+  const { data: session, status } = useSession();
   const router = useRouter();
 
   useEffect(() => {
-    if (isLoaded && user === null) {
+    if (status === "unauthenticated") {
       router.push("/login");
     }
-  }, [isLoaded, user, router]);
+  }, [status, router]);
 
-  if (!isLoaded) {
+  if (status === "loading") {
     return <Loading />;
   }
 
-  if (isLoaded && user === null) {
+  if (!session) {
     return null;
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     let totalKits = 0;
-    try {
-      const countResponse = await fetch("https://terraloom-kit-api-server.vercel.app/all-kits");
-      const existingKits = await countResponse.json();
 
+    try {
+      const countResponse = await fetch("/api/all-kits");
+      const existingKits = await countResponse.json();
       if (Array.isArray(existingKits)) {
         totalKits = existingKits.length;
       }
     } catch (error) {
-      console.error("Error fetching kit count:", error);
-      toast.error("Failed to determine kit priority. Submission cancelled.");
+      toast.error("Failed to determine kit priority.");
       return;
     }
+
     const newPriority = totalKits + 1;
+
     const formData = {
       title: e.target.name.value,
       category: e.target.category.value,
-      creator_name: user.fullName || user.username || "Anonymous",
-      creator_email: user.primaryEmailAddress?.emailAddress || "N/A",
+      creator_name: session.user.name || "Anonymous",
+      creator_email: session.user.email || "N/A",
       stock_status: e.target.stock.value,
       image_url: e.target.imageLink.value,
       created_date: new Date(),
@@ -53,72 +53,60 @@ export default function page() {
       price: parseFloat(e.target.price.value),
       priority: newPriority,
     };
-    fetch("https://terraloom-kit-api-server.vercel.app/all-kits", {
+
+    fetch("/api/all-kits", {
       method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
+      headers: { "Content-type": "application/json" },
       body: JSON.stringify(formData),
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.success && data.insertedId) {
+        if (data.insertedId || data.success) {
           toast.success(`Kit has been added successfully!`);
           e.target.reset();
-          router.push("/all-kits")
-
+          router.push("/all-kits");
         } else {
-          toast.error(
-            "Failed to add kit. Server responded, but insertion failed."
-          );
-          // console.error("Server response data:", data);
+          toast.error("Failed to add kit.");
         }
       })
-      .catch((err) => {
-        toast.error("Error . Please try again.");
-      });
+      .catch(() => toast.error("Error occurred. Please try again."));
   };
+
   return (
     <>
-      <div className="max-w-xl mx-auto my-10 p-6 bg-white rounded-xl shadow-2xl border border-gray-100">
-        <h2 className="text-3xl text-center font-extrabold text-gray-900 mb-6 pb-3">
+
+      <div className="max-w-xl mx-auto my-10 p-6 bg-base-100 rounded-xl shadow-2xl border border-base-300">
+        <h2 className="text-3xl text-center font-extrabold text-base-content mb-6 pb-3">
           Add New Kit
         </h2>
+        
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* title */}
-          <div>
-            <label
-              htmlFor="name"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Kit Name:
+          {/* Kit Name */}
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text font-semibold text-base-content">Kit Name</span>
             </label>
             <input
               type="text"
-              id="name"
               name="name"
               required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              placeholder="Enter kit name"
+              className="input input-bordered w-full focus:input-primary"
             />
           </div>
-          {/* Category (Dropdown) */}
-          <div>
-            <label
-              htmlFor="category"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Category:
+
+          {/* Category */}
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text font-semibold text-base-content">Category</span>
             </label>
             <select
-              id="category"
-              defaultValue={""}
               name="category"
+              defaultValue={""}
               required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="select select-bordered w-full focus:select-primary"
             >
-              <option value="" disabled>
-                Select Category
-              </option>
+              <option value="" disabled>Select Category</option>
               <option value="Textile">Textile</option>
               <option value="Pottery">Pottery</option>
               <option value="Gardening">Gardening</option>
@@ -128,145 +116,103 @@ export default function page() {
           </div>
 
           {/* Description */}
-          <div>
-            <label
-              htmlFor="description"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Description:
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text font-semibold text-base-content">Description</span>
             </label>
             <textarea
-              id="description"
               name="description"
               required
-              rows="4"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm resize-y"
+              rows="3"
+              className="textarea textarea-bordered w-full focus:textarea-primary"
             />
           </div>
 
-          {/* Story */}
-          <div>
-            <label
-              htmlFor="story"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Story:
+          {/* Price */}
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text font-semibold text-base-content">Price</span>
             </label>
-            <textarea
-              id="story"
-              name="story"
-              required
-              rows="4"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm resize-y"
-            />
-          </div>
-
-          {/* Price (Number Input) */}
-          <div>
-            <label
-              htmlFor="price"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Price
-            </label>
-            <div className="mt-1 flex rounded-md shadow-sm">
-              <span className="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-gray-500 sm:text-sm">
-                Tk
-              </span>
+            <div className="join w-full">
+              <span className="btn join-item pointer-events-none">Tk</span>
               <input
                 type="number"
-                id="price"
                 name="price"
                 required
                 min="0"
                 step="0.01"
-                placeholder="550000"
-                className="block w-full flex-1 rounded-none rounded-r-md border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                placeholder="500"
+                className="input input-bordered join-item w-full focus:input-primary"
               />
             </div>
           </div>
 
-          {/* Stock status */}
-          <div>
-            <label
-              htmlFor="stock"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Stock Status:
+          {/* Stock */}
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text font-semibold text-base-content">Stock Status</span>
             </label>
             <select
-              id="stock"
-              defaultValue={""}
               name="stock"
+              defaultValue={""}
               required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="select select-bordered w-full focus:select-primary"
             >
-              <option value="" disabled>
-                Select Stock Status
-              </option>
+              <option value="" disabled>Select Stock Status</option>
               <option value="In Stock">In Stock</option>
               <option value="Low Stock">Low Stock</option>
               <option value="Out of Stock">Out of Stock</option>
             </select>
           </div>
 
-          {/* Image Link Input */}
-          <div>
-            <label
-              htmlFor="imageLink"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Image Link (URL):
+          {/* Image Link */}
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text font-semibold text-base-content">Image URL</span>
             </label>
             <input
               type="url"
-              id="imageLink"
               name="imageLink"
-              placeholder="e.g., https://example.com/property.jpg"
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              required
+              placeholder="https://example.com/kit.jpg"
+              className="input input-bordered w-full focus:input-primary"
             />
           </div>
 
-          <div className="pt-2 border-t mt-4 border-gray-200">
-            <p className="text-lg font-semibold text-gray-700 mb-2">
-              Posted By:
-            </p>
-
-            {/* User Name (Read-only) */}
-            <div>
-              <label className="block text-sm font-medium text-gray-500">
-                User Name:
-              </label>
-              <input
-                type="text"
-                value={user.fullName || user.username || "Anonymous"}
-                name="UserName"
-                readOnly
-                className="mt-1 block w-full px-3 py-2 border border-gray-200 rounded-md bg-gray-50 text-gray-600 sm:text-sm cursor-not-allowed"
-              />
-            </div>
-
-            {/* User Email (Read-only) */}
-            <div>
-              <label className="block text-sm font-medium text-gray-500">
-                User Email:
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={user.primaryEmailAddress?.emailAddress || "N/A"}
-                readOnly
-                className="mt-1 block w-full px-3 py-2 border border-gray-200 rounded-md bg-gray-50 text-gray-600 sm:text-sm cursor-not-allowed"
-              />
+          {/* Read Only User Info Section */}
+          <div className="pt-4 border-t border-base-300 mt-4">
+            <p className="text-lg font-bold text-primary mb-2">Posted By:</p>
+            <div className="grid grid-cols-1 gap-2">
+              <div className="form-control">
+                <label className="label py-0">
+                  <span className="label-text text-xs opacity-70">User Name</span>
+                </label>
+                <input
+                  type="text"
+                  value={session.user.name || "Anonymous"}
+                  readOnly
+                  className="input input-ghost input-sm bg-base-200 cursor-not-allowed"
+                />
+              </div>
+              <div className="form-control">
+                <label className="label py-0">
+                  <span className="label-text text-xs opacity-70">User Email</span>
+                </label>
+                <input
+                  type="email"
+                  value={session.user.email || "N/A"}
+                  readOnly
+                  className="input input-ghost input-sm bg-base-200 cursor-not-allowed"
+                />
+              </div>
             </div>
           </div>
 
-          {/* submit button */}
           <button
             type="submit"
-            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white  bg-secondary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out"
+            className="btn btn-secondary w-full text-white text-lg mt-4"
           >
-            Submit
+            Submit Kit
           </button>
         </form>
       </div>

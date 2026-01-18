@@ -1,5 +1,6 @@
 "use client";
-import { useUser } from "@clerk/nextjs";
+import Loading from "@/components/Loading/Loading";
+import { useSession } from "next-auth/react";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
@@ -16,12 +17,11 @@ const useProductData = (kitId) => {
 
     const fetchProduct = async () => {
       try {
-        const res = await fetch(`https://terraloom-kit-api-server.vercel.app/all-kits/${kitId}`);
+        const res = await fetch(`/api/all-kits/${kitId}`);
         if (!res.ok) throw new Error("Failed to fetch kit data");
         const data = await res.json();
         setKitData(data.result || data || {});
       } catch (error) {
-        // console.error("Fetch Error:", error);
         toast.error("Failed to load initial kit data.");
       } finally {
         setIsLoading(false);
@@ -34,33 +34,35 @@ const useProductData = (kitId) => {
   return { kitData, isLoading };
 };
 
-export default function page() {
+export default function UpdatePage() {
   const router = useRouter();
   const params = useParams();
   const kitId = params.id;
-
-  const { isLoaded: userLoaded, user } = useUser();
+  const { data: session, status } = useSession();
 
   const { kitData: data, isLoading: dataLoading } = useProductData(kitId);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const currentKitId = data?._id || kitId; 
+    const currentKitId = data?._id || kitId;
 
     if (!currentKitId) {
       toast.error("Kit ID is missing for update.");
       return;
     }
+
+
     const formData = {
       title: e.target.name.value,
       category: e.target.category.value,
-      creator_name: user.fullName || user.username || "Anonymous",
-      creator_email: user.primaryEmailAddress?.emailAddress || "N/A",
+      creator_name: session?.user?.name || "Anonymous",
+      creator_email: session?.user?.email || "N/A",
       stock_status: e.target.stock.value,
-      created_date: new Date(),
       description: e.target.description.value,
       price: parseFloat(e.target.price.value),
     };
-    fetch(`https://terraloom-kit-api-server.vercel.app/all-kits/${currentKitId}`, {
+
+    fetch(`/api/all-kits/${currentKitId}`, {
       method: "PUT",
       headers: {
         "Content-type": "application/json",
@@ -68,80 +70,82 @@ export default function page() {
       body: JSON.stringify(formData),
     })
       .then((res) => res.json())
-      .then((data) => {
+      .then(() => {
         toast.success("Kit has been updated successfully");
-        e.target.reset();
         router.push(`/all-kits/${currentKitId}`);
+        router.refresh(); 
       })
-      .catch((err) => {
-        toast.error("Error");
+      .catch(() => {
+        toast.error("Error updating kit");
       });
   };
-  if (!userLoaded || dataLoading) {
-    return (
-      <div className="text-center py-20 text-xl font-medium">
-        Loading data...
-      </div>
-    );
+
+  if (status === "loading" || dataLoading) {
+    return <Loading />;
   }
+
+  if (status === "unauthenticated") {
+    router.push("/login");
+    return null;
+  }
+
   if (!data || !data._id) {
     return (
-      <div className="text-center py-20 text-xl font-medium text-red-500">
-        Error: Could not find kit data to update. Check the ID and API.
+      <div className="text-center py-20 text-xl font-medium text-error">
+        Error: Could not find kit data to update.
       </div>
     );
   }
+
   return (
     <>
-      <div className="max-w-xl mx-auto my-10 p-6 bg-white rounded-xl shadow-2xl border border-gray-100">
-        <h2 className="text-3xl text-center font-extrabold text-gray-900 mb-6  pb-3">
-          Update your Property
+
+      <div className="max-w-xl mx-auto my-10 p-6 bg-base-100 rounded-xl shadow-2xl border border-base-300">
+        <h2 className="text-3xl text-center font-extrabold text-base-content mb-6 pb-3">
+          Update Kit Details
         </h2>
+        
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Title */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Kit Name:
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text font-semibold text-base-content">Kit Name</span>
             </label>
             <input
               type="text"
               name="name"
               defaultValue={data.title}
               required
-              className="mt-1 block w-full text-black px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="input input-bordered w-full focus:input-primary"
             />
           </div>
 
           {/* Description */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Description:
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text font-semibold text-base-content">Description</span>
             </label>
             <textarea
               name="description"
               defaultValue={data.description}
               required
               rows="4"
-              className="mt-1 block w-full text-black px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm resize-y"
+              className="textarea textarea-bordered w-full focus:textarea-primary"
             />
           </div>
 
-          {/* Category  */}
-          <div>
-            <label
-              htmlFor="category"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Category:
+          {/* Category */}
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text font-semibold text-base-content">Category</span>
             </label>
             <select
-              id="category"
               defaultValue={data.category}
               name="category"
               required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="select select-bordered w-full focus:select-primary"
             >
-              <option value="">Select Category</option>
+              <option value="" disabled>Select Category</option>
               <option value="Textile">Textile</option>
               <option value="Pottery">Pottery</option>
               <option value="Gardening">Gardening</option>
@@ -150,95 +154,71 @@ export default function page() {
             </select>
           </div>
 
-          {/* Price (Number Input) */}
-          <div>
-            <label
-              htmlFor="price"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Price
+          {/* Price */}
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text font-semibold text-base-content">Price</span>
             </label>
-            <div className="mt-1 flex rounded-md shadow-sm">
-              <span className="inline-flex items-center rounded-l-md border border-r-0 border-gray-300 bg-gray-50 px-3 text-gray-500 sm:text-sm">
-                Tk
-              </span>
+            <div className="join w-full">
+              <span className="btn join-item pointer-events-none bg-base-200">Tk</span>
               <input
                 type="number"
-                id="price"
                 name="price"
                 defaultValue={data.price}
                 required
                 min="0"
                 step="0.01"
-                placeholder="550000"
-                className="block w-full flex-1 rounded-none rounded-r-md border-gray-300 px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                className="input input-bordered join-item w-full focus:input-primary"
               />
             </div>
           </div>
-            {/* Stock status */}
-          <div>
-            <label
-              htmlFor="stock"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Stock Status:
+
+          {/* Stock Status */}
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text font-semibold text-base-content">Stock Status</span>
             </label>
             <select
-              id="stock"
               defaultValue={data.stock_status}
               name="stock"
               required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="select select-bordered w-full focus:select-primary"
             >
-              <option value="">Select Stock Status</option>
               <option value="In Stock">In Stock</option>
               <option value="Low Stock">Low Stock</option>
               <option value="Out of Stock">Out of Stock</option>
             </select>
           </div>
-          <div className="pt-2 border-t mt-4 border-gray-200">
-            <p className="text-lg font-semibold text-gray-700 mb-2">
-              Posted By:
-            </p>
 
-            {/* User Name  */}
-            <div>
-              <label className="block text-sm font-medium text-gray-500">
-                User Name:
-              </label>
+          {/* User Info Section (Read Only) */}
+          <div className="pt-4 border-t border-base-300 mt-4">
+            <p className="text-lg font-bold text-primary mb-2">Editor Info:</p>
+            <div className="grid grid-cols-1 gap-2">
               <input
                 type="text"
-                value={user.fullName || user.username || "Anonymous"}
-                name="UserName"
+                value={session?.user?.name || "Anonymous"}
                 readOnly
-                className="mt-1 block w-full px-3 py-2 border border-gray-200 rounded-md bg-gray-50 text-gray-600 sm:text-sm cursor-not-allowed"
+                className="input input-sm bg-base-200 cursor-not-allowed"
               />
-            </div>
-
-            {/* User Email*/}
-            <div>
-              <label className="block text-sm font-medium text-gray-500">
-                User Email:
-              </label>
               <input
                 type="email"
-                name="email"
-                value={user.primaryEmailAddress?.emailAddress || "N/A"}
+                value={session?.user?.email || "N/A"}
                 readOnly
-                className="mt-1 block w-full px-3 py-2 border border-gray-200 rounded-md bg-gray-50 text-gray-600 sm:text-sm cursor-not-allowed"
+                className="input input-sm bg-base-200 cursor-not-allowed"
               />
             </div>
           </div>
 
+
           <button
             type="submit"
-            className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out"
+            className="btn btn-secondary w-full text-white text-lg mt-4"
           >
-            Update
+            Update Kit
           </button>
         </form>
       </div>
-      <Toaster></Toaster>
+      <Toaster />
     </>
   );
 }

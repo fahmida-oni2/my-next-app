@@ -3,142 +3,106 @@ import Image from "next/image";
 import Link from "next/link";
 import ReviewForm from "@/components/ReviewForm/ReviewForm";
 import AddToCartButton from "@/components/AddToCartButton/AddToCartButton";
-async function getPost(kitId) {
-  const url = `https://terraloom-kit-api-server.vercel.app/all-kits/${kitId}`;
-  const res = await fetch(url);
-
-  if (!res.ok) {
-    // console.error(`Fetch failed with status: ${res.status}`);
-    throw new Error("Failed to fetch data");
-  }
-
-  const data = await res.json();
-  return data.result;
-}
+import { getDb } from "@/lib/db";
+import { ObjectId } from "mongodb";
 
 export default async function Page(props) {
-  const resolvedParams = await props.params;
-  const kitId = resolvedParams.id;
+  const params = await props.params;
+  const id = params.id;
 
-  const data = await getPost(kitId);
+  const db = await getDb();
+  let rawData = null;
 
-  if (!data) {
+  try {
+    rawData = await db.collection("kit-collection").findOne({ 
+      _id: new ObjectId(id) 
+    });
+  } catch (err) {
+    console.error("Invalid ID format:", id);
+  }
+
+
+  if (!rawData) {
     return (
-      <div>
-        <h1 className="text-3xl font-bold text-center">Property Not Found</h1>
+      <div className="min-h-screen flex items-center justify-center">
+        <h1 className="text-3xl font-bold text-center">Kit Not Found</h1>
       </div>
     );
   }
+
+
+  const data = JSON.parse(JSON.stringify(rawData));
+
   const {
-    _id,
-    title,
-    price,
-    image_url,
-    category,
-    creator_name,
-    creator_email,
-    created_date,
-    stock_status,
-    description,
-    story
+    _id, title, price, image_url, category, creator_name,
+    creator_email, created_date, stock_status, description, story
   } = data;
 
   return (
-    <div>
+    <div className="bg-base-100 min-h-screen">
       <div className="lg:flex grid grid-cols-1 gap-5 m-10 items-center">
         <div className="mr-10">
           <Image
-            className="lg:w-350 lg:h-100 md:w-[200px] w-[250px] mx-auto lg:object-cover shadow-xl border-gray-500"
+            className="rounded-2xl shadow-xl border border-gray-200"
             src={image_url}
             alt={title}
-            width={400}
-            height={300}
+            width={500}
+            height={400}
+            priority
             style={{ objectFit: "cover" }}
           />
         </div>
 
         <div className="space-y-3 p-5">
-          <h1 className="font-extrabold text-3xl text-center">{title}</h1>
-          <p className="font-bold text-2xl text-center">Category: {category}</p>
-          <p className="font-bold text-2xl text-center">
-            Posted by: <span className="text-[#632EE3]">{creator_name}</span>
-          </p>
-          <p className="font-bold text-2xl text-center">
-            Contact Email:{" "}
-            <span className="text-[#632EE3]">{creator_email}</span>
-          </p>
-          <p className="font-bold text-2xl text-center">
-            Posted Date: <span className="text-[#632EE3]">{created_date}</span>
-          </p>
+          <h1 className="font-extrabold text-3xl text-primary">{title}</h1>
+          <p className="font-bold text-xl">Category: <span className="badge badge-secondary">{category}</span></p>
+          
+          <div className="text-sm space-y-1 text-gray-600">
+            <p>Posted by: <span className="font-semibold text-secondary">{creator_name}</span></p>
+            <p>Contact: <span className="font-semibold">{creator_email}</span></p>
+            <p>Date: {created_date}</p>
+          </div>
 
-          <div className="border-b border-solid border-b-gray-300 mt-5"></div>
+          <div className="divider"></div>
 
-          <div className="lg:flex gap-2 m-5 justify-center items-center">
-            <div className="mr-10 flex gap-2 justify-center items-center">
-              <p className="font-bold text-2xl text-center"> Stock Status:</p>
-              <h1 className="font-extrabold text-2xl text-center">
-                {stock_status}
-              </h1>
+          <div className="flex gap-10 items-center">
+            <div>
+              <p className="text-sm font-bold uppercase text-gray-400">Status</p>
+              <p className="font-extrabold text-2xl">{stock_status}</p>
             </div>
-            <div className="mr-10 flex gap-2 justify-center items-center">
-              <p className="font-bold text-2xl text-center"> Price:</p>
-              <h1 className="font-extrabold text-2xl text-center">
-                {price} TK
-              </h1>
+            <div>
+              <p className="text-sm font-bold uppercase text-gray-400">Price</p>
+              <p className="font-extrabold text-2xl text-secondary">{price} TK</p>
             </div>
           </div>
 
-          <div className="mr-10">
-            <p className="font-bold text-center text-3xl mb-3 border-b-2 border-solid border-b-gray-400">
-              Description
-            </p>
-            <h1 className="font-extrabold text-2xl text-center">
-              {description}
-            </h1>
+          <div className="py-4">
+            <p className="font-bold text-lg border-b-2 border-primary w-fit mb-2">Description</p>
+            <p className="text-gray-700 leading-relaxed">{description}</p>
           </div>
-           <div className="mr-10">
-            <p className="font-semibold italic text-center text-2xl mb-3 border-b-2 border-solid border-b-gray-400">
-              Story
-            </p>
-            <h1 className="font-semibold text-center text-gray-500 italic">
-              {story}
-            </h1>
+
+          {story && (
+            <div className="py-4 bg-gray-50 p-4 rounded-xl italic">
+              <p className="font-semibold text-primary mb-1">The Story</p>
+              <p className="text-gray-600">"{story}"</p>
+            </div>
+          )}
+
+          <div className="pt-5">
+            <AddToCartButton kitData={data} />
           </div>
-          <div className="flex justify-center items-center">
-
-        <AddToCartButton
-          kitData={{
-            _id,
-            title,
-            price,
-            image_url,
-            category,
-            // Pass all necessary data for the cart
-          }}
-        />
-      </div>
-
         </div>
       </div>
 
-      <ReviewForm
-        kitData={{
-          _id,
-          title,
-          price,
-          image_url,
-        }}
-      />
+      <div className="max-w-4xl mx-auto px-5">
+        <ReviewForm kitData={data} />
+      </div>
 
-      <div className="flex justify-center items-center mb-5 mt-5">
-        <Link
-          href="/all-kits"
-          className="btn rounded-xl text-white  bg-secondary w-50"
-        >
+      <div className="flex justify-center py-10">
+        <Link href="/all-kits" className="btn btn-outline btn-secondary px-10">
           Go Back
         </Link>
       </div>
-      <div className="border-b-2 border-solid border-b-gray-400 mb-5 ml-7 mr-7"></div>
     </div>
   );
 }

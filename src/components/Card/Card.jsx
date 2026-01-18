@@ -28,10 +28,10 @@ export default function Card({kit}) {
         <p className="text-center">{description}</p>
 
    <div className='flex justify-between'>
-    <button className={`flex h-10 w-30 btn btn-outline gap-2 ${stockClass} bg-base-300`}>
+    <button className={`flex h-10 lg:w-30 btn btn-outline gap-2 ${stockClass} bg-base-300`}>
       {stock_status}
     </button>
-    <button  className='flex h-10 w-30 btn btn-outline gap-2 border-gray-200 text-orange-500 bg-base-300'>
+    <button  className='flex h-10 lg:w-30 btn btn-outline gap-2 border-gray-200 text-orange-500 bg-base-300'>
         {newPrice.toFixed(2)} TK
     </button>
    </div>

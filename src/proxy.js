@@ -1,27 +1,37 @@
 import { NextResponse } from 'next/server';
+import { getToken } from "next-auth/jwt";
 
-export function proxy(request) {
-  const protectedPathPrefix = '/all-kits/'; 
-  const loginPath = '/login'; 
+// Changed 'middleware' to 'proxy'
+export async function proxy(request) {
+  const pathname = request.nextUrl.pathname;
 
-  const isProtectedPath = request.nextUrl.pathname.startsWith(protectedPathPrefix);
+  // 1. Define paths that SHOULD be protected
+  const isProtectedPath = 
+    pathname.startsWith('/add-kit') || 
+    pathname.startsWith('/manage-kit') ||
+    pathname.startsWith('/my-purchase');
 
-  const isAuthenticated = request.cookies.has('__session'); 
+  // 2. Check for NextAuth Token
+  const session = await getToken({
+    req: request,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
 
-  if (isProtectedPath && !isAuthenticated) { 
-    
-    const loginUrl = new URL(loginPath, request.url);
-    
-    loginUrl.searchParams.set('redirect', request.nextUrl.pathname + request.nextUrl.search);
-    
+  // 3. Redirect logic
+  if (isProtectedPath && !session) {
+    const loginUrl = new URL('/login', request.url);
+    loginUrl.searchParams.set('redirect', pathname + request.nextUrl.search);
     return NextResponse.redirect(loginUrl);
   }
+
   return NextResponse.next();
 }
 
 export const config = {
-
   matcher: [
-    '/all-kits/:path*', 
+    '/add-kit/:path*',
+    '/manage-kit/:path*',
+    '/my-purchase/:path*',
+    '/my-review/:path*',
   ],
 };

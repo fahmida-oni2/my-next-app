@@ -1,6 +1,6 @@
 "use client";
 
-import { useUser } from "@clerk/nextjs";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
@@ -17,31 +17,31 @@ const getNumericPrice = (priceString) => {
 };
 
 export default function page() {
-  const { isLoaded, isSignedIn } = useUser();
+ const { data: session, status } = useSession();
   const router = useRouter();
   const [kitItems, setKitItems] = useState([]);
   const [loadingKits, setLoadingKits] = useState(true);
   const [sortOrder, setSortOrder] = useState("none");
 
-  // --- 1. Authentication Guard ---
-  useEffect(() => {
-    if (isLoaded && !isSignedIn) {
+ 
+ useEffect(() => {
+    if (status === "unauthenticated") {
       router.push("/login");
     }
-  }, [isLoaded, isSignedIn, router]);
+  }, [status, router]);
 
-  useEffect(() => {
-    if (isSignedIn) {
+useEffect(() => {
+    if (status === "authenticated") {
       try {
         const myKits = JSON.parse(localStorage.getItem("myKits")) || [];
         setKitItems(myKits);
       } catch (error) {
-        toast.error("Error loading kits from localStorage:", error);
+        toast.error("Error loading kits from storage");
       } finally {
         setLoadingKits(false);
       }
     }
-  }, [isSignedIn]);
+  }, [status]);
 
   const sortedKitItems = useMemo(() => {
     if (sortOrder === "price-asc") {
@@ -74,14 +74,10 @@ export default function page() {
     }
   };
 
-  if (!isLoaded || !isSignedIn || loadingKits) {
+if (status === "loading" || loadingKits) {
     return (
       <div className="flex justify-center items-center h-screen">
-        {!isLoaded || !isSignedIn ? (
-          <Loading></Loading>
-        ) : (
-          "**Loading your kits...**"
-        )}
+        <Loading />
       </div>
     );
   }

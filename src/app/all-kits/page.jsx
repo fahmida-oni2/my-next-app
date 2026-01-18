@@ -1,12 +1,15 @@
 import KitSearching from '@/components/KitSearching/KitSearching';
 import React from 'react'
 export default async function page() {
-  const data = await fetch('https://terraloom-kit-api-server.vercel.app/all-kits',
-    {
-    next: { revalidate: 1 }, // Seconds
-  }
-  )
+const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
+  
+  const data = await fetch(`${baseUrl}/api/all-kits`, {
+    next: { revalidate: 1 }, 
+  });
 
+  if (!data.ok) {
+    throw new Error('Failed to fetch kits');
+  }
   const kits = await data.json()
    return (
          <div className='flex flex-col min-h-screen'>

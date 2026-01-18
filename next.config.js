@@ -9,6 +9,14 @@ const nextConfig = {
         port: '', 
         pathname: '/**', 
       },
+      {
+        protocol: 'https',
+        hostname: 'www.w3schools.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'ui-avatars.com',
+      },
     ],
   },
 async rewrites() {
