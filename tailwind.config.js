@@ -1,33 +1,26 @@
-/** @type {import('tailwindcss').Config} */
-const daisyui = require("daisyui");
-
+// tailwind.config.js
 module.exports = {
-  content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
-  theme: {
-    extend: {},
-  },
-  plugins: [daisyui],
   daisyui: {
     themes: [
       {
-        terraloom: {
-          "primary": "#2D4F1E",    
-          "secondary": "#C0573E",  
-          "accent": "#E9B44C",     
-          "neutral": "#3D4451",    
-          "base-100": "#FBFBF2",   
-          "info": "#3ABFF8",
-          "success": "#36D399",
-          "warning": "#FBBD23",
-          "error": "#F87272",
-          "base-content": "#1f2937", 
+        light: {
+          "primary": "#0056B3",
+          "secondary": "#FFA500",
+          "accent": "#3ABFF8",
+          "neutral": "#1B262C",
+          "base-100": "#F8FAFC",
+          "base-content": "#0F172A",
+        },
+        dark: {
+          "primary": "#FF8C00",
+          "secondary": "#3ABFF8",
+          "accent": "#F28500",
+          "neutral": "#0F172A",
+          "base-100": "#1B262C",
+          "base-content": "#E2E8F0",
         },
       },
-      "dark",
     ],
   },
-};
+  plugins: [require("daisyui")],
+}

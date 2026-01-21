@@ -1,23 +1,31 @@
-"use client";
+
 import AvailableKit from "@/components/AvailableKit/AvailableKit";
 import Banner from "@/components/Banner/Banner";
 import Loading from "@/components/Loading/Loading";
 import "animate.css";
-import Image from "next/image";
+import { getDb } from "@/lib/db";
 import Link from "next/link";
 import { Suspense } from "react";
+async function getLatestKits() {
+  try {
+    const db = await getDb();
+    const result = await db.collection("kit-collection")
+      .find()
+      .sort({ created_date: -1 }) // Get newest first
+      .limit(4) // Only show the latest 4
+      .toArray();
+    
+    return JSON.parse(JSON.stringify(result));
+  } catch (error) {
+    console.error("Failed to load latest kits:", error);
+    return [];
+  }
+}
 
-const BASE_URL = process.env.NEXTAUTH_URL || 'http://localhost:3000';
-
-
-const latestKitsPromise = fetch(`${BASE_URL}/api/latest-kits`, {
-  cache: 'no-store' 
-}).then(res => {
-  if (!res.ok) throw new Error("Failed to fetch");
-  return res.json();
-});
-
-export default function Home() {
+export default async function Home() {
+  // Fetch data directly on the server
+  const latestKits = await getLatestKits();
+  
   return (
     <div className="bg-base-100 min-h-screen">
       <Banner />
@@ -40,7 +48,7 @@ export default function Home() {
           }
         >
       
-          <AvailableKit promise={latestKitsPromise} />
+        <AvailableKit kits={latestKits} />
         </Suspense>
         
         <div className="mt-12">
@@ -162,7 +170,7 @@ export default function Home() {
               </div>
               <div className="form-control w-full">
                 <label className="label"><span className="label-text font-bold text-base-content">Message</span></label>
-                <textarea className="textarea textarea-bordered h-32 focus:textarea-primary" required></textarea>
+                <textarea className=" w-full border border-gray-400 h-32 focus:textarea-primary" required></textarea>
               </div>
               <div className="form-control mt-6">
                 <button type="submit" className="btn btn-secondary text-white font-bold text-lg">Send Message</button>

@@ -74,17 +74,18 @@ export default function AddKitPage() {
 
   return (
     <>
-
       <div className="max-w-xl mx-auto my-10 p-6 bg-base-100 rounded-xl shadow-2xl border border-base-300">
         <h2 className="text-3xl text-center font-extrabold text-base-content mb-6 pb-3">
           Add New Kit
         </h2>
-        
+
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Kit Name */}
           <div className="form-control">
             <label className="label">
-              <span className="label-text font-semibold text-base-content">Kit Name</span>
+              <span className="label-text font-semibold text-base-content">
+                Kit Name
+              </span>
             </label>
             <input
               type="text"
@@ -98,7 +99,9 @@ export default function AddKitPage() {
           {/* Category */}
           <div className="form-control">
             <label className="label">
-              <span className="label-text font-semibold text-base-content">Category</span>
+              <span className="label-text font-semibold text-base-content">
+                Category
+              </span>
             </label>
             <select
               name="category"
@@ -106,7 +109,9 @@ export default function AddKitPage() {
               required
               className="select select-bordered w-full focus:select-primary"
             >
-              <option value="" disabled>Select Category</option>
+              <option value="" disabled>
+                Select Category
+              </option>
               <option value="Textile">Textile</option>
               <option value="Pottery">Pottery</option>
               <option value="Gardening">Gardening</option>
@@ -118,7 +123,9 @@ export default function AddKitPage() {
           {/* Description */}
           <div className="form-control">
             <label className="label">
-              <span className="label-text font-semibold text-base-content">Description</span>
+              <span className="label-text font-semibold text-base-content">
+                Description
+              </span>
             </label>
             <textarea
               name="description"
@@ -127,11 +134,27 @@ export default function AddKitPage() {
               className="textarea textarea-bordered w-full focus:textarea-primary"
             />
           </div>
+        {/* story */}
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text font-semibold text-base-content">
+                Kit Story
+              </span>
+            </label>
+            <textarea
+              name="story" 
+              required
+             
+              className="textarea textarea-bordered w-full focus:textarea-primary"
+            />
+          </div>
 
           {/* Price */}
           <div className="form-control">
             <label className="label">
-              <span className="label-text font-semibold text-base-content">Price</span>
+              <span className="label-text font-semibold text-base-content">
+                Price
+              </span>
             </label>
             <div className="join w-full">
               <span className="btn join-item pointer-events-none">Tk</span>
@@ -150,7 +173,9 @@ export default function AddKitPage() {
           {/* Stock */}
           <div className="form-control">
             <label className="label">
-              <span className="label-text font-semibold text-base-content">Stock Status</span>
+              <span className="label-text font-semibold text-base-content">
+                Stock Status
+              </span>
             </label>
             <select
               name="stock"
@@ -158,7 +183,9 @@ export default function AddKitPage() {
               required
               className="select select-bordered w-full focus:select-primary"
             >
-              <option value="" disabled>Select Stock Status</option>
+              <option value="" disabled>
+                Select Stock Status
+              </option>
               <option value="In Stock">In Stock</option>
               <option value="Low Stock">Low Stock</option>
               <option value="Out of Stock">Out of Stock</option>
@@ -168,13 +195,15 @@ export default function AddKitPage() {
           {/* Image Link */}
           <div className="form-control">
             <label className="label">
-              <span className="label-text font-semibold text-base-content">Image URL</span>
+              <span className="label-text font-semibold text-base-content">
+                Image URL
+              </span>
             </label>
             <input
               type="url"
               name="imageLink"
               required
-              placeholder="https://example.com/kit.jpg"
+           
               className="input input-bordered w-full focus:input-primary"
             />
           </div>
@@ -185,7 +214,9 @@ export default function AddKitPage() {
             <div className="grid grid-cols-1 gap-2">
               <div className="form-control">
                 <label className="label py-0">
-                  <span className="label-text text-xs opacity-70">User Name</span>
+                  <span className="label-text text-xs opacity-70">
+                    User Name
+                  </span>
                 </label>
                 <input
                   type="text"
@@ -196,7 +227,9 @@ export default function AddKitPage() {
               </div>
               <div className="form-control">
                 <label className="label py-0">
-                  <span className="label-text text-xs opacity-70">User Email</span>
+                  <span className="label-text text-xs opacity-70">
+                    User Email
+                  </span>
                 </label>
                 <input
                   type="email"

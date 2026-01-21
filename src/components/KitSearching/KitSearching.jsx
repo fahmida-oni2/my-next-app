@@ -4,21 +4,24 @@ import Card from '@/components/Card/Card';
 import "animate.css"; 
 import Loading from '../Loading/Loading';
 import ErrorKit from '../ErrorKit/ErrorKit';
+
 const KitSearching = ({ initialKits }) => {
     const [search, setSearch] = useState('');
     const [filteredKits, setFilteredKits] = useState(() => initialKits || []);
     const [loading, setLoading] = useState(false); 
-    
+
+    // --- PAGINATION STATE ---
+    const [currentPage, setCurrentPage] = useState(1);
+    const kitsPerPage = 8; 
+
     useEffect(() => {
         setFilteredKits(initialKits || []);
     }, [initialKits]);
 
     useEffect(() => {
-       if (filteredKits.length === 0) return;
         setLoading(true);
-
         const timer = setTimeout(() => {
-            const baseData = initialKits; 
+            const baseData = initialKits || []; 
 
             const results = search.trim()
                 ? baseData.filter(kit =>
@@ -27,52 +30,96 @@ const KitSearching = ({ initialKits }) => {
                 : baseData;
 
             setFilteredKits(results);
+            setCurrentPage(1); 
             setLoading(false);
         }, 400);
 
         return () => clearTimeout(timer);
     }, [initialKits, search]);
 
+    // --- PAGINATION LOGIC ---
+    const indexOfLastKit = currentPage * kitsPerPage;
+    const indexOfFirstKit = indexOfLastKit - kitsPerPage;
+    const currentKits = filteredKits.slice(indexOfFirstKit, indexOfLastKit);
+    const totalPages = Math.ceil(filteredKits.length / kitsPerPage);
+
     const showNoResult = filteredKits.length === 0 && search.trim().length > 0;
 
     return (
-        <>
-    <div>
-                <div className='lg:flex justify-between items-center mt-5 pl-5 pr-5 mb-5 '>
-                <div className='font-bold text-2xl pb-5 lg:pb-0'> 
-                    ({filteredKits.length}) Kits Found
+        <div className="pb-10">
+            {/* Header and Search */}
+            <div className='lg:flex justify-between items-center mt-5 px-5 mb-8'>
+                <div className='font-bold text-2xl text-base-content'> 
+                    <span className="text-primary">{filteredKits.length}</span> Kits Found
                 </div>
-                <label className="input gap-0">
-                    <span className="label"></span>
-                    <input 
-                        value={search} 
-                        onChange={e => setSearch(e.target.value)} 
-                        type="search" 
-                        placeholder="Search kit title..." 
-                    />
-                </label>
+                
+                <div className="form-control">
+                    <div className="input-group">
+                        <input 
+                            value={search} 
+                            onChange={e => setSearch(e.target.value)} 
+                            type="text" 
+                            placeholder="Search kit title..." 
+                            className="input input-bordered focus:input-primary w-full max-w-xs"
+                        />
+                    </div>
+                </div>
             </div>
 
- <div>
- {loading ? (
-                <div className='flex justify-center items-center p-20'>
-                    <Loading />
-                </div>
-            ) : showNoResult ? (
-                <div >
+            {/* Content Area */}
+            <div>
+                {loading ? (
+                    <div className='flex justify-center items-center p-20'>
+                        <Loading />
+                    </div>
+                ) : showNoResult ? (
                     <ErrorKit searchTerm={search} />
-                </div>
-            ) : (
-                <div className='grid grid-cols-1  lg:grid-cols-4 gap-4'>
-                    {filteredKits.map(kit => (
-                        <Card key={kit._id} kit={kit} />
-                    ))}
-                </div>
-            )}
- </div>
-           
-    </div>
-        </>
+                ) : (
+                    <>
+                        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-5'>
+                            {currentKits.map(kit => (
+                                <Card key={kit._id} kit={kit} />
+                            ))}
+                        </div>
+
+                        {/* --- PAGINATION UI --- */}
+                        {totalPages > 1 && (
+                            <div className="flex justify-center mt-12">
+                                <div className="join border border-base-300 shadow-sm">
+                                    <button 
+                                        onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                                        className={`join-item btn btn-md ${currentPage === 1 ? 'btn-disabled' : 'btn-ghost'}`}
+                                    >
+                                        «
+                                    </button>
+                                    
+                                    {[...Array(totalPages)].map((_, index) => (
+                                        <button
+                                            key={index + 1}
+                                            onClick={() => setCurrentPage(index + 1)}
+                                            className={`join-item btn btn-md ${
+                                                currentPage === index + 1 
+                                                ? 'btn-primary text-primary-content' 
+                                                : 'btn-ghost'
+                                            }`}
+                                        >
+                                            {index + 1}
+                                        </button>
+                                    ))}
+
+                                    <button 
+                                        onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                                        className={`join-item btn btn-md ${currentPage === totalPages ? 'btn-disabled' : 'btn-ghost'}`}
+                                    >
+                                        »
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </>
+                )}
+            </div>
+        </div>
     );
 };
 
